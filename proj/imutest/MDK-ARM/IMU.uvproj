@@ -348,9 +348,9 @@
             <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,STM32F30X,</Define>
+              <Define>USE_STDPERIPH_DRIVER,STM32F30X,UVISION</Define>
               <Undefine></Undefine>
-              <IncludePath>.;..\..\..\lib\board;..\..\..\lib\imu;..\..\..\lib\STM32F30x_StdPeriph_Driver\inc</IncludePath>
+              <IncludePath>.;..\..\..\lib;..\..\..\lib\board;..\..\..\lib\imu;..\..\..\lib\STM32F30x_StdPeriph_Driver\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -445,6 +445,11 @@
               <FileName>startup.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\..\..\..\lib\board\startup.s</FilePath>
+            </File>
+            <File>
+              <FileName>syscalls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\lib\board\syscalls.c</FilePath>
             </File>
           </Files>
         </Group>
