@@ -3,20 +3,13 @@ stm32f3discovery
 Projects related to the stm32f3discovery board from STMicro
 
 Contains:
-	+ Libraries - set of libraries for overall support of the board
+	+ lib - set of libraries for overall support of the board
 	    + CMSIS - ARM CORTEX M3 support definitions
 		+ STM32F30x_StdPeriph_Driver - CPU support package for STM32F30x
 		+ STM32_USB-FS-Device_Driver - CPU support package for USB endpoint
 		+ board - stm32f3discovery board specific files and utilities
 		+ imulib - library of imu related functions
-	+ Projects - set of projects based on this board
-		+ mutest - imu devices tests (includes fusion algs, corrections algs and output)
+	+ proj - set of projects based on this board
+		+ imutest - imu devices tests (includes fusion algs, corrections algs and output)
 
 Works contain parts of ARM's CSIMS and STMicro support libraries and by others.
-
-All parts are licensed with their corresponding licence.
-
-Parts created by me (Michal Krombholz) are licensed as 
-
-Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) 
-http://creativecommons.org/licenses/by-sa/3.0/
