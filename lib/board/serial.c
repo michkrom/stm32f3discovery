@@ -8,6 +8,7 @@
 
 #include "stm32f30x_conf.h"
 #include "stm32f30x.h"
+
 #include "stm32f30x_rcc.h"
 
 /* USART2 PA.2 Tx, PA.3 Rx STM32F303 */
@@ -61,6 +62,8 @@ int InitSerial(int baudrate)
 //******************************************************************************
  
 #include <stdio.h>
+
+#ifdef UVISION
 #include <rt_misc.h>
  
 #pragma import(__use_no_semihosting_swi)
@@ -95,3 +98,5 @@ void _ttywrch(int ch)
   while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
   USART_SendData(USART2, ch);
 }
+
+#endif

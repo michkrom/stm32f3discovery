@@ -88,7 +88,7 @@ uint8_t ReadGyroRaw(int16_t RawData[3])
 	L3GD20_Read(tmpbuffer,L3GD20_OUT_X_L_ADDR,6);
 	
 	/* check in the control register 4 the data alignment (Big Endian or Little Endian)*/
-  gyrInBE = tmpreg & 0x40 != 0;
+	gyrInBE = (tmpreg & 0x40) != 0;
 	if(!gyrInBE)
 	{
 		for(i=0; i<3; i++)
@@ -227,9 +227,9 @@ void ReadAccelerometer(float* pfData)
 	LSM303DLHC_Read(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG4_A, ctrlx,2);
 	LSM303DLHC_Read(ACC_I2C_ADDRESS, LSM303DLHC_OUT_X_L_A, buffer, 6);
 
-	accInFifo = ctrlx[1] & 0x40 != 0;
-  accInBE   = ctrlx[0] & 0x40 != 0;
-	accSens   = ctrlx[0] & 0x30;
+	accInFifo = (ctrlx[1] & 0x40) != 0;
+	accInBE   = (ctrlx[0] & 0x40) != 0;
+	accSens   = (ctrlx[0] & 0x30);
 	
 	/* FIFO mode get shifted by 6 (10 bits), normal is 12 bits */
 	shift = accInFifo ? 6 : 4;

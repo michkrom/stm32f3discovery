@@ -28,6 +28,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f3_discovery_l3gd20.h"
 
+#include "stm32f30x_gpio.h"
+#include "stm32f30x_rcc.h"
+#include "stm32f30x_spi.h"
+#include "stm32f30x_i2c.h"
+
+
+
 /** @addtogroup Utilities
   * @{
   */ 

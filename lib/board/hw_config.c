@@ -31,6 +31,11 @@
 #include "platform_config.h"
 #include "stm32f3_discovery.h"
 
+#include "stm32f30x_exti.h"
+#include "stm32f30x_pwr.h"
+#include "stm32f30x_gpio.h"
+#include "stm32f30x_rcc.h"
+
 /** @addtogroup STM32F3-Discovery_Demo
   * @{
   */

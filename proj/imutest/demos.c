@@ -32,6 +32,7 @@
 #include "leds.h"
 #include "key.h"
 
+#include <math.h>
 
 #ifndef M_PI
 #define M_PI 3.1415927f
@@ -59,12 +60,12 @@ void ComputePitchAndRollFromAcc(float Xg, float Yg, float Zg, float* pitch, floa
 
 void ComputePitchAndRoll()
 {	
-			float fNormAcc = _sqrtf((AccBuffer[0]*AccBuffer[0])+(AccBuffer[1]*AccBuffer[1])+(AccBuffer[2]*AccBuffer[2]));
+			float fNormAcc = sqrtf((AccBuffer[0]*AccBuffer[0])+(AccBuffer[1]*AccBuffer[1])+(AccBuffer[2]*AccBuffer[2]));
 
 			fSinRoll = -AccBuffer[1]/fNormAcc;
-			fCosRoll = _sqrtf(1.0f-(fSinRoll * fSinRoll));
+			fCosRoll = sqrtf(1.0f-(fSinRoll * fSinRoll));
 			fSinPitch = AccBuffer[0]/fNormAcc;
-			fCosPitch = _sqrtf(1.0f-(fSinPitch * fSinPitch));
+			fCosPitch = sqrtf(1.0f-(fSinPitch * fSinPitch));
 			if ( fSinRoll >0)
 			{
 				if (fCosRoll>0)

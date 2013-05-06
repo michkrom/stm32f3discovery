@@ -1,33 +1,8 @@
-/**
-	******************************************************************************
-	* @file		main.c 
-	* @author	MCD Application Team
-	* @version V1.1.0
-	* @date		20-September-2012
-	* @brief	 Main program body
-	******************************************************************************
-	* @attention
-	*
-	* <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
-	*
-	* Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-	* You may not use this file except in compliance with the License.
-	* You may obtain a copy of the License at:
-	*
-	*				http://www.st.com/software_license_agreement_liberty_v2
-	*
-	* Unless required by applicable law or agreed to in writing, software 
-	* distributed under the License is distributed on an "AS IS" BASIS, 
-	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	* See the License for the specific language governing permissions and
-	* limitations under the License.
-	*
-	******************************************************************************
-	*/
-
-
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+
+#include "stm32f30x_rcc.h"
+
 #include "leds.h"
 #include "key.h"
 #include "serial.h"
@@ -119,7 +94,7 @@ void RunImuTests()
 	printf("Zeroing gyro...");
 	tb = SysTickCount;
 	//ZeroGyro(100);
-  printf("100 avg took %d ms\r\n",SysTickCount-tb);
+	printf("100 avg took %d ms\r\n",(int)(SysTickCount-tb));
 	SetLed(ALL|OFF);
 	
 	
@@ -132,7 +107,7 @@ void RunImuTests()
 	// initial sample timestamp
 	tb = SysTickCount;		
 
-  while(1)	
+	while(1)	
 	{
 		float a[3],m[3],g[3];
 		float gdeg[3];
@@ -145,7 +120,7 @@ void RunImuTests()
 		// get time of acquisition
 		tb2 = SysTickCount;				
 		
-    // sample period is time elapsed since previous sampling of sensors		
+		// sample period is time elapsed since previous sampling of sensors		
 		samplePeriod=0.001f*(tb2-tb);
 
 		// update timebase for next time

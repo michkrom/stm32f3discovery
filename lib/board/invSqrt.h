@@ -5,6 +5,7 @@
 #ifndef FAST_INV_SQRT
 
 //float invSqrt(float x) { return 1.0f/sqrtf(x); }
+#include <math.h>
 #define invSqrt(x) (1.0f/sqrtf(x))
 
 #else

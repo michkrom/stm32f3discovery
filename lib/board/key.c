@@ -2,6 +2,9 @@
 #include <stm32f30x.h>
 #include <stm32f3_discovery.h>
 
+#include "stm32f30x_exti.h"
+#include "stm32f30x_gpio.h"
+
 static unsigned UserButtonPressed = 0;
 static unsigned UserButtonPressedLast = 0;
 

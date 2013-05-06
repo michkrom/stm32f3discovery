@@ -17,7 +17,8 @@
 
 #include "MadgwickAHRS.h"
 #include <math.h>
-#include "invsqrt.h"
+
+#include <invSqrt.h>
 
 //---------------------------------------------------------------------------------------------------
 // Variable definitions
