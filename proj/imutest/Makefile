@@ -41,7 +41,7 @@ SRCS += \
 PROJ_NAME=imutest
 
 # Location of the linker scripts
-LDSCRIPT_INC=$(BRD)
+LDSCRIPT_INC=$(BRD)/ldscripts
 
 # location of OpenOCD Board .cfg files (only used with 'make program')
 OPENOCD_BOARD_DIR=board
@@ -68,9 +68,12 @@ OBJDUMP=arm-none-eabi-objdump
 SIZE=arm-none-eabi-size
 
 CFLAGS  = -Wall -g -std=c99 -Os  
-#CFLAGS += -mlittle-endian -mthumb -mcpu=cortex-m0 -march=armv6s-m
-CFLAGS += -mlittle-endian -mcpu=cortex-m0  -march=armv6-m -mthumb
-CFLAGS += -ffunction-sections -fdata-sections
+CFLAGS += -mlittle-endian -mcpu=cortex-m4 -mthumb
+
+# floating point options
+CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=hard -fsingle-precision-constant
+
+CFLAGS += -ffunction-sections -fdata-sections 
 CFLAGS += -Wl,--gc-sections -Wl,-Map=$(PROJ_NAME).map
 
 ###################################################

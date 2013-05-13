@@ -75,7 +75,7 @@ FILE __stdin;
 int fputc(int ch, FILE *f)
 {
 	while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET); 
-  USART_SendData(USART2, ch);
+  	
   return(ch);
 }
  
@@ -98,5 +98,7 @@ void _ttywrch(int ch)
   while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
   USART_SendData(USART2, ch);
 }
+#elseifdef NEWLIB
 
+  
 #endif
