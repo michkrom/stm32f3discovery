@@ -54,16 +54,17 @@ void RunDemos()
 
 /**
 * @brief  bump leds by one
+* @param speed [1..10]
 * @retval None
 */
-void bumpLeds()
+void bumpLeds(int speed)
 {
   static const char l[] = { L1, L2, L3, L4, L5, L6, L7, L8 };
   static int n = 0;
 
-  SetLed(l[n]|OFF);
-  n = (n+1) % sizeof(l)/sizeof(l[0]);
-  SetLed(l[n]|ON);
+  SetLed( l[(n/10) % sizeof(l)/sizeof(l[0])] | OFF );
+  n = n+speed;
+  SetLed( l[(n/10) % sizeof(l)/sizeof(l[0])] | ON );
   
 }
 
@@ -109,6 +110,7 @@ void RunImuTests()
   int outputcnt = 0;
   float xmax,xmin,ymax,ymin,zmax,zmin;
   float quaternion[4] = {1,0,0,0};
+  int speed = 1;
 
 #if 0 // not necessary if full filter fusion is used (which corrects for gyro bias and drift)
   SetLed(ALL|ON);
@@ -136,10 +138,13 @@ void RunImuTests()
     float samplePeriod;
 
     // bang on the pipes
-    bumpLeds();
+    bumpLeds(speed);
     
     // read all the sensors
     sampleSensors(a,m,g);
+    
+    // adjust led rotation speed, with a running average
+    speed += (g[0] / 18)/10; 
 
     // get time of acquisition
     tb2 = SysTickCount;
