@@ -9,25 +9,10 @@
 /*  TODO: some more work has to be done on this                        */
 /***********************************************************************/
 
-#include "stm32f30x_conf.h"
-#include "stm32f30x.h"
-#include "stm32f30x_rcc.h"
 
-
-void outch( char ch )
-{
-  while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET); 
-  USART_SendData(USART2, ch);
-}
-
-
-char inch()
-{
-  char ch;
-  while(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET); 
-  ch = USART_ReceiveData(USART2);
-  return ch;
-}
+// these must be externaly defined (in serial.c)
+extern void tty_outc( char ch );
+extern char tty_inc();
 
 
 #ifdef UVISION
@@ -44,13 +29,13 @@ FILE __stdin;
  
 int fputc(int ch, FILE *f)
 {
-  outch(ch);
+  tty_outc(ch);
   return(ch);
 }
  
 int fgetc(FILE *f)
 {
-  return((int)inch());
+  return((int)tty_inc());
 }
  
 int ferror(FILE *f)
@@ -61,10 +46,10 @@ int ferror(FILE *f)
  
 void _ttywrch(int ch)
 {
-  outch(ch);
+  tty_outc(ch);
 }
 
-#else
+#else // gcc newlib
 
 #include <stdlib.h>
 #include <reent.h>
@@ -84,15 +69,15 @@ _ssize_t _read_r(struct _reent *r, int file, void *ptr, size_t len)
 
   for (i = 0; i < len; i++)
   {      
-    c = inch();
+    c = tty_inc();
     *p++ = c;
-		// echo back
-    outch(c);
+    // echo back
+    tty_outc(c);
 
     if (c == 0x0D && i <= (len - 2))
     {
       *p = 0x0A;
-      outch(0x0A);
+      tty_outc(0x0A);
       return i + 2;
     }
   }
@@ -112,8 +97,8 @@ _ssize_t _write_r (
   p = (const unsigned char*) ptr;
 
   for (i = 0; i < len; i++) {
-    if (*p == '\n' ) outch('\r');
-    outch(*p++);
+    if (*p == '\n' ) tty_outc('\r');
+    tty_outc(*p++);
   }
 
   return len;

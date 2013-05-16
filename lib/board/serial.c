@@ -56,3 +56,20 @@ int InitSerial(int baudrate)
 	USART_Cmd(USART2, ENABLE);	
   return 0;
 }
+
+
+// the following routines are for benefit of syscalls.c
+
+void tty_outc( char ch )
+{
+  while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET); 
+  USART_SendData(USART2, ch);	
+}
+
+char tty_inc()
+{
+  char ch;
+  while(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET); 
+  ch = USART_ReceiveData(USART2);
+  return ch;
+}
