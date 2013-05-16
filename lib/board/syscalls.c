@@ -16,7 +16,7 @@
 
 void outch( char ch )
 {
-	while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET); 
+  while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET); 
   USART_SendData(USART2, ch);
 }
 
@@ -26,7 +26,7 @@ char inch()
   char ch;
   while(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET); 
   ch = USART_ReceiveData(USART2);
-	return ch;
+  return ch;
 }
 
 
@@ -44,13 +44,13 @@ FILE __stdin;
  
 int fputc(int ch, FILE *f)
 {
-	outch(ch);
+  outch(ch);
   return(ch);
 }
  
 int fgetc(FILE *f)
 {
-	return((int)inch());
+  return((int)inch());
 }
  
 int ferror(FILE *f)
@@ -61,7 +61,7 @@ int ferror(FILE *f)
  
 void _ttywrch(int ch)
 {
-	outch(ch);
+  outch(ch);
 }
 
 #else
@@ -84,7 +84,7 @@ _ssize_t _read_r(struct _reent *r, int file, void *ptr, size_t len)
 
   for (i = 0; i < len; i++)
   {      
-    c = intch();
+    c = inch();
     *p++ = c;
 		// echo back
     outch(c);
@@ -106,25 +106,25 @@ _ssize_t _write_r (
     const void *ptr, 
     size_t len)
 {
-	int i;
-	const unsigned char *p;
-	
-	p = (const unsigned char*) ptr;
-	
-	for (i = 0; i < len; i++) {
-		if (*p == '\n' ) outch('\r');
-		outch(*p++);
-	}
-	
-	return len;
-}
+  int i;
+  const unsigned char *p;
+
+  p = (const unsigned char*) ptr;
+
+  for (i = 0; i < len; i++) {
+    if (*p == '\n' ) outch('\r');
+    outch(*p++);
+  }
+
+  return len;
+  }
 
 
 int _close_r(
     struct _reent *r, 
     int file)
 {
-	return 0;
+  return 0;
 }
 
 
@@ -134,7 +134,7 @@ _off_t _lseek_r(
     _off_t ptr, 
     int dir)
 {
-	return (_off_t)0;	/*  Always indicate we are at file beginning.	*/
+  return (_off_t)0;	/*  Always indicate we are at file beginning.	*/
 }
 
 
@@ -143,20 +143,19 @@ int _fstat_r(
     int file, 
     struct stat *st)
 {
-	/*  Always set as character device.				*/
-	st->st_mode = S_IFCHR;	
-		/* assigned to strong type with implicit 	*/
-		/* signed/unsigned conversion.  Required by 	*/
-		/* newlib.					*/
-
-	return 0;
+  /*  Always set as character device.				*/
+  st->st_mode = S_IFCHR;	
+  /* assigned to strong type with implicit 	*/
+  /* signed/unsigned conversion.  Required by 	*/
+  /* newlib.					*/
+  return 0;
 }
 
 int isatty(int file); /* avoid warning */
 
 int _isatty(int file)
 {
-	return 1;
+  return 1;
 }
 
 #if 0
@@ -190,15 +189,15 @@ void * _sbrk_r(
     struct _reent *_s_r, 
     ptrdiff_t nbytes)
 {
-	char  *base;		/*  errno should be set to  ENOMEM on error	*/
+  char  *base;		/*  errno should be set to  ENOMEM on error	*/
 
-	if (!heap_ptr) {	/*  Initialize if first time through.		*/
-		heap_ptr = end;
-	}
-	base = heap_ptr;	/*  Point to end of heap.			*/
-	heap_ptr += nbytes;	/*  Increase heap.				*/
-	
-	return base;		/*  Return pointer to start of new heap area.	*/
+  if (!heap_ptr) {	/*  Initialize if first time through.		*/
+    heap_ptr = end;
+  }
+  base = heap_ptr;	/*  Point to end of heap.			*/
+  heap_ptr += nbytes;	/*  Increase heap.				*/
+
+  return base;		/*  Return pointer to start of new heap area.	*/
 }
 
 #endif
