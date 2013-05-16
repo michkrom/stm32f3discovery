@@ -6,7 +6,8 @@ AR=arm-none-eabi-ar
 vpath %.c STM32F30x_StdPeriph_Driver/src
 
 CFLAGS  = -g -O2 -Wall
-CFLAGS += -mlittle-endian -mthumb -mcpu=cortex-m0 -march=armv6s-m
+CFLAGS += -mlittle-endian -mcpu=cortex-m3 -mthumb
+CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 CFLAGS += -ffreestanding -nostdlib
 CFLAGS += -includestm32f30x_conf.h -I../CMSIS/Include -I../CMSIS/Device/ST/STM32F30x/Include -Iinc -I..
 
