@@ -123,6 +123,28 @@ float imuHeadingTiltCompensated(float mx, float my, float mz, float ax, float ay
   return heading;
 }
 
+
+// Converts aerospace sequence magnetic vector into earth reference vector
+// from MadwickFullAHRS
+void imuMagneticVectorToEarthFrame( /*in*/ float m[3], /*in*/ float q[4], /*out*/ float h[3] )
+{
+	float m_x=m[0];
+	float m_y=m[1];
+	float m_z=m[2];
+	
+	// earth relative to sensor quaternion elements with initial conditions (part of filter state)
+	#define SEq_1 q[0]
+	#define SEq_2 q[1]
+	#define SEq_3 q[2]
+	#define SEq_4 q[3]
+
+	// compute flux in the earth frame
+	h[0] = 2.0f * m_x * (0.5f - (-SEq_3) * (-SEq_3) - (-SEq_4) * (-SEq_4)) + 2.0f * m_y * (SEq_1 * (-SEq_4) + (-SEq_2) * (-SEq_3)) + 2.0f * m_z * ((-SEq_2) * (-SEq_4) - SEq_1 * (-SEq_3));
+	h[1] = 2.0f * m_x * ((-SEq_2) * (-SEq_3) - SEq_1 * (-SEq_4)) + 2.0f * m_y * (0.5f - (-SEq_2) * (-SEq_2) - (-SEq_4) * (-SEq_4)) + 2.0f * m_z * (SEq_1 * (-SEq_2) + (-SEq_3) * (-SEq_4));
+	h[2] = 2.0f * m_x * (SEq_1 * (-SEq_3) + (-SEq_2) * (-SEq_4)) + 2.0f * m_y * ((-SEq_3) * (-SEq_4) - SEq_1 * (-SEq_2)) + 2.0f * m_z * (0.5f - (-SEq_2) * (-SEq_2) - (-SEq_3) * (-SEq_3));	
+}
+
+
 // Normalize vector of 3 floats to have magnitude of 1
 void imuNormalizeV3(float v[3])
 {

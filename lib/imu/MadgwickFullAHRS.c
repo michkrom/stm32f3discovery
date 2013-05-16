@@ -21,17 +21,28 @@ float zeta = 0.001511499f; // Sqrt(3.0 / 4.0) * (PI * (0.1 / 180.0));
 // gyroscope biases error (part of filter state)
 float w_bx = 0, w_by = 0, w_bz = 0;
 
-// output
+// state & output
 // reference direction of earth's magnetic field aka heading and inclination
 float b_x = 1, b_z = 0;
 
+// corrected gyro result
+float w_x, w_y, w_z;
+// computed flux in the earth frame
+float h_x, h_y, h_z;                                    
+
+
+/**
+ * @brief	using Madgwick-full-filter update current orientation quaternion
+ * @param	g[3] gyro measurement
+ * @param	a[3] accel measurement
+ * @param	m[3[ magneto measurement
+ * @param	q[4] in/out - position quaternion 
+ * @retval None; quaternion[4] and lobals for additional results
+ */
 void MadgwickFullAHRSUpdate(float g[3], float a[3], float m[3], 
 														float samplePeriod, 
-														/*out*/ float quaternion[4])
+														/*in/out*/ float quaternion[4])
 {
-	float w_x=g[0];
-	float w_y=g[1];
-	float w_z=g[2];
 	float a_x=a[0];
 	float a_y=a[1];
 	float a_z=a[2];
@@ -53,7 +64,6 @@ void MadgwickFullAHRSUpdate(float g[3], float a[3], float m[3],
 	J_41, J_42, J_43, J_44, J_51, J_52, J_53, J_54, J_61, J_62, J_63, J_64; //
 	float SEqHatDot_1, SEqHatDot_2, SEqHatDot_3, SEqHatDot_4;              // estimated direction of the gyroscope error (quaternion derrivative)
 	float w_err_x, w_err_y, w_err_z;                                       // estimated direction of the gyroscope error (angular)
-	float h_x, h_y, h_z;                                                   // computed flux in the earth frame
 
 	// axulirary variables to avoid reapeated calcualtions
 	float halfSEq_1 = 0.5f * SEq_1;
@@ -135,9 +145,9 @@ void MadgwickFullAHRSUpdate(float g[3], float a[3], float m[3],
 	w_bz += w_err_z * samplePeriod * zeta;
 
 	// correct gyroscope result
-	w_x -= w_bx;
-	w_y -= w_by;
-	w_z -= w_bz;
+	w_x = g[0] - w_bx;
+	w_y = g[1] - w_by;
+	w_z = g[2] - w_bz;
 
 	// compute the quaternion rate measured by gyroscopes
 	SEqDot_omega_1 = -halfSEq_2 * w_x - halfSEq_3 * w_y - halfSEq_4 * w_z;

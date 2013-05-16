@@ -1,6 +1,6 @@
 /***********************************************************************/
 /*                                                                     */
-/*  SYSCALLS.C:  System Calls Remapping for gcc/newlib                 */
+/*  SYSCALLS.C:  System Calls Remapping for gcc/newlib and/or uVISION  */
 /*  most of this is from newlib-lpc and a Keil-demo                    */
 /*                                                                     */
 /*  these are "reentrant functions" as needed by                       */
@@ -9,19 +9,30 @@
 /*  TODO: some more work has to be done on this                        */
 /***********************************************************************/
 
-  
 #include "stm32f30x_conf.h"
 #include "stm32f30x.h"
 #include "stm32f30x_rcc.h"
 
 
-//******************************************************************************
-// Hosting of stdio functionality through USART1
-//******************************************************************************
- 
-#include <stdio.h>
+void outch( char ch )
+{
+	while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET); 
+  USART_SendData(USART2, ch);
+}
+
+
+char inch()
+{
+  char ch;
+  while(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET); 
+  ch = USART_ReceiveData(USART2);
+	return ch;
+}
+
 
 #ifdef UVISION
+
+#include <stdio.h>
 
 #include <rt_misc.h>
  
@@ -33,17 +44,13 @@ FILE __stdin;
  
 int fputc(int ch, FILE *f)
 {
-	while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET); 
-  USART_SendData(USART2, ch);
+	outch(ch);
   return(ch);
 }
  
 int fgetc(FILE *f)
 {
-  char ch;
-  while(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET); 
-  ch = USART_ReceiveData(USART2);
-	return((int)ch);
+	return((int)inch());
 }
  
 int ferror(FILE *f)
@@ -54,8 +61,7 @@ int ferror(FILE *f)
  
 void _ttywrch(int ch)
 {
-  while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
-  USART_SendData(USART2, ch);
+	outch(ch);
 }
 
 #else
@@ -78,14 +84,15 @@ _ssize_t _read_r(struct _reent *r, int file, void *ptr, size_t len)
 
   for (i = 0; i < len; i++)
   {      
-    c = USART_ReceiveData(USART2);
+    c = intch();
     *p++ = c;
-    USART_SendData(USART2, c);
+		// echo back
+    outch(c);
 
     if (c == 0x0D && i <= (len - 2))
     {
       *p = 0x0A;
-      USART_SendData(USART2, 0x0A);
+      outch(0x0A);
       return i + 2;
     }
   }
@@ -105,8 +112,8 @@ _ssize_t _write_r (
 	p = (const unsigned char*) ptr;
 	
 	for (i = 0; i < len; i++) {
-		if (*p == '\n' ) USART_SendData(USART2,'\r');
-		USART_SendData(USART2, *p++);
+		if (*p == '\n' ) outch('\r');
+		outch(*p++);
 	}
 	
 	return len;

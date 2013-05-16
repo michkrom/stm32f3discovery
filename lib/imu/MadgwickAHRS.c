@@ -32,8 +32,17 @@ float madgwickBeta = betaDef;			// 2 * proportional gain (Kp)
 //---------------------------------------------------------------------------------------------------
 // AHRS algorithm update
 
-void MadgwickAHRSupdate(float g[3], float a[3], float m[3], 
-                        float samplePeriod, 
+/**
+ * @brief	using Madgwick-filter update current AHRS quaternion
+ * @param	g[3] gyro measurement
+ * @param	a[3] accel measurement
+ * @param	m[3] magneto measurement
+ * @param	samplePeriod time duration since previous measument (this sample period)
+ * @param	q[4] in/out - position quaternion 
+ * @retval None; quaternion[4]
+ */
+void MadgwickAHRSupdate(float g[3], float a[3], float m[3],
+                        float samplePeriod,
 												/*out*/ float quaternion[4])
 {
 	float gx=g[0];
@@ -46,7 +55,7 @@ void MadgwickAHRSupdate(float g[3], float a[3], float m[3],
 	float my=m[1];
 	float mz=m[2];
 
-	// substitute the original ars (keep original for ease of code updating)
+	// substitute the original pars (keep original for ease of code updating)
 	#define q0 (quaternion[0])
 	#define q1 (quaternion[1])
 	#define q2 (quaternion[2])
@@ -63,13 +72,13 @@ void MadgwickAHRSupdate(float g[3], float a[3], float m[3],
 		MadgwickAHRSupdateIMU(g, a, samplePeriod, quaternion);
 		return;
 	}
-	
+
 	// Rate of change of quaternion from gyroscope
 	qDot1 = 0.5f * (-q1 * gx - q2 * gy - q3 * gz);
 	qDot2 = 0.5f * (q0 * gx + q2 * gz - q3 * gy);
 	qDot3 = 0.5f * (q0 * gy - q1 * gz + q3 * gx);
 	qDot4 = 0.5f * (q0 * gz + q1 * gy - q2 * gx);
-	
+
 	// Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalisation)
 	if(!((ax == 0.0f) && (ay == 0.0f) && (az == 0.0f))) {
 
@@ -77,7 +86,7 @@ void MadgwickAHRSupdate(float g[3], float a[3], float m[3],
 		recipNorm = invSqrt(ax * ax + ay * ay + az * az);
 		ax *= recipNorm;
 		ay *= recipNorm;
-		az *= recipNorm;   
+		az *= recipNorm;
 
 		// Normalise magnetometer measurement
 		recipNorm = invSqrt(mx * mx + my * my + mz * mz);
@@ -120,7 +129,9 @@ void MadgwickAHRSupdate(float g[3], float a[3], float m[3],
 		s1 = _2q3 * (2.0f * q1q3 - _2q0q2 - ax) + _2q0 * (2.0f * q0q1 + _2q2q3 - ay) - 4.0f * q1 * (1 - 2.0f * q1q1 - 2.0f * q2q2 - az) + _2bz * q3 * (_2bx * (0.5f - q2q2 - q3q3) + _2bz * (q1q3 - q0q2) - mx) + (_2bx * q2 + _2bz * q0) * (_2bx * (q1q2 - q0q3) + _2bz * (q0q1 + q2q3) - my) + (_2bx * q3 - _4bz * q1) * (_2bx * (q0q2 + q1q3) + _2bz * (0.5f - q1q1 - q2q2) - mz);
 		s2 = -_2q0 * (2.0f * q1q3 - _2q0q2 - ax) + _2q3 * (2.0f * q0q1 + _2q2q3 - ay) - 4.0f * q2 * (1 - 2.0f * q1q1 - 2.0f * q2q2 - az) + (-_4bx * q2 - _2bz * q0) * (_2bx * (0.5f - q2q2 - q3q3) + _2bz * (q1q3 - q0q2) - mx) + (_2bx * q1 + _2bz * q3) * (_2bx * (q1q2 - q0q3) + _2bz * (q0q1 + q2q3) - my) + (_2bx * q0 - _4bz * q2) * (_2bx * (q0q2 + q1q3) + _2bz * (0.5f - q1q1 - q2q2) - mz);
 		s3 = _2q1 * (2.0f * q1q3 - _2q0q2 - ax) + _2q2 * (2.0f * q0q1 + _2q2q3 - ay) + (-_4bx * q3 + _2bz * q1) * (_2bx * (0.5f - q2q2 - q3q3) + _2bz * (q1q3 - q0q2) - mx) + (-_2bx * q0 + _2bz * q2) * (_2bx * (q1q2 - q0q3) + _2bz * (q0q1 + q2q3) - my) + _2bx * q1 * (_2bx * (q0q2 + q1q3) + _2bz * (0.5f - q1q1 - q2q2) - mz);
-		recipNorm = invSqrt(s0 * s0 + s1 * s1 + s2 * s2 + s3 * s3); // normalise step magnitude
+
+    // Normalise step magnitude
+		recipNorm = invSqrt(s0 * s0 + s1 * s1 + s2 * s2 + s3 * s3);
 		s0 *= recipNorm;
 		s1 *= recipNorm;
 		s2 *= recipNorm;
@@ -154,9 +165,16 @@ void MadgwickAHRSupdate(float g[3], float a[3], float m[3],
 //---------------------------------------------------------------------------------------------------
 // IMU algorithm update
 
+/**
+ * @brief	using Madgwick-filter update current IMU quaternion (heading will drift)
+ * @param	g[3] gyro measurement
+ * @param	a[3] accel measurement
+ * @param	q[4] in/out - position quaternion 
+ * @retval None; quaternion[4]
+ */
 void MadgwickAHRSupdateIMU(float g[3], float a[3],
 													 float samplePeriod,
-                           /*out*/ float quaternion[4]) 
+                           /*out*/ float quaternion[4])
 {
 	float gx=g[0];
 	float gy=g[1];
@@ -164,11 +182,12 @@ void MadgwickAHRSupdateIMU(float g[3], float a[3],
 	float ax=a[0];
 	float ay=a[1];
 	float az=a[2];
-	// substitute the original ars (keep original for ease of code updating)
+	// substitute the original pars (keep original for ease of code updating)
 	#define q0 (quaternion[0])
 	#define q1 (quaternion[1])
 	#define q2 (quaternion[2])
 	#define q3 (quaternion[3])
+	
 	float recipNorm;
 	float s0, s1, s2, s3;
 	float qDot1, qDot2, qDot3, qDot4;
@@ -187,7 +206,7 @@ void MadgwickAHRSupdateIMU(float g[3], float a[3],
 		recipNorm = invSqrt(ax * ax + ay * ay + az * az);
 		ax *= recipNorm;
 		ay *= recipNorm;
-		az *= recipNorm;   
+		az *= recipNorm;
 
 		// Auxiliary variables to avoid repeated arithmetic
 		_2q0 = 2.0f * q0;
@@ -209,7 +228,9 @@ void MadgwickAHRSupdateIMU(float g[3], float a[3],
 		s1 = _4q1 * q3q3 - _2q3 * ax + 4.0f * q0q0 * q1 - _2q0 * ay - _4q1 + _8q1 * q1q1 + _8q1 * q2q2 + _4q1 * az;
 		s2 = 4.0f * q0q0 * q2 + _2q0 * ax + _4q2 * q3q3 - _2q3 * ay - _4q2 + _8q2 * q1q1 + _8q2 * q2q2 + _4q2 * az;
 		s3 = 4.0f * q1q1 * q3 - _2q1 * ax + 4.0f * q2q2 * q3 - _2q2 * ay;
-		recipNorm = invSqrt(s0 * s0 + s1 * s1 + s2 * s2 + s3 * s3); // normalise step magnitude
+
+		// Normalise step magnitude
+		recipNorm = invSqrt(s0 * s0 + s1 * s1 + s2 * s2 + s3 * s3);
 		s0 *= recipNorm;
 		s1 *= recipNorm;
 		s2 *= recipNorm;
@@ -234,6 +255,7 @@ void MadgwickAHRSupdateIMU(float g[3], float a[3],
 	q1 *= recipNorm;
 	q2 *= recipNorm;
 	q3 *= recipNorm;
+	
 	#undef q0
 	#undef q1
 	#undef q2

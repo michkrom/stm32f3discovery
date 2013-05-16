@@ -13,10 +13,12 @@ void imuQuaternionToYawPitchRoll(float q[4], float ypr[3]);
 void imuQuaternionToGravity(float q[4], float g[3]);
 
 float imuHeadingTiltCompensated(float mx, float my, float mz, float ax, float ay, float az);
+void  imuMagneticVectorToEarthFrame( /*in*/ float m[3], /*in*/ float q[4], /*out*/ float h[3] );
 
 float imuHeading(float mx, float my, float mz);
 float imuRoll(float ax, float ay, float az);
 float imuPitch(float ax, float ay, float az);
+
 
 void imuRadToDegV3( float v[3] );
 void imuDegToRadV3( float v[3] );
