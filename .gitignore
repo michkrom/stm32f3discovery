@@ -29,3 +29,5 @@ bin/
 
 # Common
 *.bak
+*.log
+*.kate-swp
