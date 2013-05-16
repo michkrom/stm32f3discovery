@@ -56,6 +56,8 @@ int InitSerial(int baudrate)
 	USART_Cmd(USART2, ENABLE);	
   return 0;
 }
+<<<<<<< HEAD
+=======
 
 //******************************************************************************
 // Hosting of stdio functionality through USART1
@@ -102,3 +104,4 @@ void _ttywrch(int ch)
 
   
 #endif
+>>>>>>> d7c7073da17cfc360f35d3ebd6555c81e3cfc5cb
