@@ -16,7 +16,9 @@
 *.out
 *.app
 
+
 # Build
+*.elf
 *.hex
 *.bin
 *.map

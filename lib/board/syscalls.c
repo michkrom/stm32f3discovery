@@ -9,26 +9,11 @@
 /*  TODO: some more work has to be done on this                        */
 /***********************************************************************/
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-#include <stdlib.h>
-#include <reent.h>
-#include <sys/stat.h>
->>>>>>> d7c7073da17cfc360f35d3ebd6555c81e3cfc5cb
-=======
-#include <stdlib.h>
-#include <reent.h>
-#include <sys/stat.h>
->>>>>>> d7c7073da17cfc360f35d3ebd6555c81e3cfc5cb
-#include "serial.h"
   
 #include "stm32f30x_conf.h"
 #include "stm32f30x.h"
-
 #include "stm32f30x_rcc.h"
 
-<<<<<<< HEAD
 
 //******************************************************************************
 // Hosting of stdio functionality through USART1
@@ -80,21 +65,8 @@ void _ttywrch(int ch)
 #include <sys/stat.h>
 
 unsigned __errno;
-=======
-unsigned __errno;
 
 
-// new code for _read_r provided by Alexey Shusharin - Thanks
-_ssize_t _read_r(struct _reent *r, int file, void *ptr, size_t len)
-{
-  char c;
-  int  i;
-  unsigned char *p;
->>>>>>> d7c7073da17cfc360f35d3ebd6555c81e3cfc5cb
-
-  p = (unsigned char*)ptr;
-
-<<<<<<< HEAD
 // new code for _read_r provided by Alexey Shusharin - Thanks
 _ssize_t _read_r(struct _reent *r, int file, void *ptr, size_t len)
 {
@@ -110,14 +82,6 @@ _ssize_t _read_r(struct _reent *r, int file, void *ptr, size_t len)
     *p++ = c;
     USART_SendData(USART2, c);
 
-=======
-  for (i = 0; i < len; i++)
-  {      
-    c = USART_ReceiveData(USART2);
-    *p++ = c;
-    USART_SendData(USART2, c);
-
->>>>>>> d7c7073da17cfc360f35d3ebd6555c81e3cfc5cb
     if (c == 0x0D && i <= (len - 2))
     {
       *p = 0x0A;
@@ -125,13 +89,6 @@ _ssize_t _read_r(struct _reent *r, int file, void *ptr, size_t len)
       return i + 2;
     }
   }
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-#endif
-=======
-=======
->>>>>>> d7c7073da17cfc360f35d3ebd6555c81e3cfc5cb
   return i;
 }
 
@@ -236,7 +193,5 @@ void * _sbrk_r(
 	
 	return base;		/*  Return pointer to start of new heap area.	*/
 }
-<<<<<<< HEAD
->>>>>>> d7c7073da17cfc360f35d3ebd6555c81e3cfc5cb
-=======
->>>>>>> d7c7073da17cfc360f35d3ebd6555c81e3cfc5cb
+
+#endif
