@@ -12,7 +12,7 @@
 
 // these must be externaly defined (in serial.c)
 extern void tty_outc( char ch );
-extern char tty_inc();
+extern char tty_inc( void );
 
 
 #ifdef UVISION
