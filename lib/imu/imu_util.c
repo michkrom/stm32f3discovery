@@ -56,17 +56,42 @@ void imuQuaternionToYawPitchRoll2(float q[4], float ypr[3])
 #endif
 
 // quaternion to YPR in aerospace sequence
-// based on wikipedia: 
-// http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
 void imuQuaternionToYawPitchRoll(float q[4], float ypr[3]) 
 {
-	  // yaw
+#ifdef WRONG
+    // yaw
     ypr[0] = atan2f(2*(q[0]*q[3]+q[1]*q[2]), 1-2*(q[2]*q[2]+q[3]*q[3]));
-	  // pitch
+    // pitch
     ypr[1] = asinf(2*(q[0]*q[2]-q[3]*q[1]));
-		// roll
+    // roll
     ypr[2] = atan2f(2*(q[0]*q[1]-q[2]*q[3]), 1-2*(q[1]*q[1]+q[2]*q[2]));
+
+#else    
+
+/** FROM FreeIMU
+ * Returns the yaw pitch and roll angles, respectively defined as the angles in radians between
+ * the Earth North and the IMU X axis (yaw), the Earth ground plane and the IMU X axis (pitch)
+ * and the Earth ground plane and the IMU Y axis.
+ * 
+ * @note This is not an Euler representation: the rotations aren't consecutive rotations but only
+ * angles from Earth and the IMU. For Euler representation Yaw, Pitch and Roll see FreeIMU::getEuler
+ * 
+ * @param ypr three floats array which will be populated by Yaw, Pitch and Roll angles in radians
+*/
+   float gx, gy, gz; // estimated gravity direction
+  
+   gx = 2 * (q[1]*q[3] - q[0]*q[2]);
+   gy = 2 * (q[0]*q[1] + q[2]*q[3]);
+   gz = q[0]*q[0] - q[1]*q[1] - q[2]*q[2] + q[3]*q[3];
+   
+   ypr[0] = atan2f(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0]*q[0] + 2 * q[1] * q[1] - 1);
+   ypr[1] = atanf(gx / sqrt(gy*gy + gz*gz));
+   ypr[2] = atanf(gy / sqrt(gx*gx + gz*gz));
+#endif
+   
 }
+
+
 
 
 // based on Freescale AN3461
@@ -74,7 +99,7 @@ void imuQuaternionToYawPitchRoll(float q[4], float ypr[3])
 // aerospace sequence (nose up is positive pitch)
 float imuPitch(float ax, float ay, float az)
 {
-    return -atan2f(ax, sqrtf(ay*ay + az*az));
+   return -atan2f(ax, sqrtf(ay*ay + az*az));
 }
 
 // based on Freescale AN3461
@@ -82,7 +107,7 @@ float imuPitch(float ax, float ay, float az)
 // aerospace sequence (right wing down is positive roll)
 float imuRoll(float ax, float ay, float az)
 {
-		return atan2f(ay, az);
+  return atan2f(ay, az);
 }
 
 
