@@ -1,6 +1,10 @@
 #ifndef _IMUDEVS_H
 #define _IMUDEVS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
 	* @brief	Configure the L3G20 gyro
 	* @param	None
@@ -42,5 +46,9 @@ void ReadAccelerometer(float* pfData);
 	* @retval None
 	*/
 void ReadMagnetometer(float* pfData);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

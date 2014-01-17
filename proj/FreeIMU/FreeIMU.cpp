@@ -25,20 +25,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdint.h>
 //#define DEBUG
 #include "FreeIMU.h"
-// #include "WireUtils.h"
+//#include "WireUtils.h"
 //#include "DebugUtils.h"
 
 //#include "vector_math.h"
 
 #ifdef STM32F3DISCOVERY
 
-#include "imu_devs.h"
+#include <imu_devs.h>
+
+#define FAST_INV_SQRT
+#include <invSqrt.h>
+
 #include "main.h"
+
+/*
+extern "C" void Delay(int);
 
 void delay(int ms)
 {
   Delay(ms);
 }
+*/
 
 int micros()
 {
@@ -46,6 +54,8 @@ int micros()
   return SysTickCount*1000;
 }
 
+
+#define DEBUG_PRINT(s)
 #endif
 
 
@@ -392,6 +402,7 @@ void FreeIMU::getValues(float * values) {
 */
 void FreeIMU::zeroGyro() {
   const int totSamples = 3;
+#ifndef STM32F3DISCOVERY  
   int raw[11];
   float tmpOffsets[] = {0,0,0};
   
@@ -405,8 +416,25 @@ void FreeIMU::zeroGyro() {
   gyro_off_x = tmpOffsets[0] / totSamples;
   gyro_off_y = tmpOffsets[1] / totSamples;
   gyro_off_z = tmpOffsets[2] / totSamples;
-}
 
+#else
+  
+  float raw[11];
+  float tmpOffsets[] = {0,0,0};
+  gyro_off_x =gyro_off_y = gyro_off_z = 0;
+  for (int i = 0; i < totSamples; i++){
+    getValues(raw);
+    tmpOffsets[0] += raw[3];
+    tmpOffsets[1] += raw[4];
+    tmpOffsets[2] += raw[5];
+  }
+  
+  gyro_off_x = tmpOffsets[0] / totSamples;
+  gyro_off_y = tmpOffsets[1] / totSamples;
+  gyro_off_z = tmpOffsets[2] / totSamples;
+  
+#endif  
+}
 
 /**
  * Quaternion implementation of the 'DCM filter' [Mayhony et al].  Incorporates the magnetic distortion
@@ -420,6 +448,8 @@ void FreeIMU::zeroGyro() {
 void  FreeIMU::AHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) {
 #elif IS_6DOM()
 void  FreeIMU::AHRSupdate(float gx, float gy, float gz, float ax, float ay, float az) {
+#else
+#warning "UNKNOWN xDOM"
 #endif
   float recipNorm;
   float q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;
@@ -437,7 +467,6 @@ void  FreeIMU::AHRSupdate(float gx, float gy, float gz, float ax, float ay, floa
   q2q2 = q2 * q2;
   q2q3 = q2 * q3;
   q3q3 = q3 * q3;
-  
   #if IS_9DOM()
   // Use magnetometer measurement only when valid (avoids NaN in magnetometer normalisation)
   if((mx != 0.0f) && (my != 0.0f) && (mz != 0.0f)) {
@@ -567,7 +596,6 @@ void FreeIMU::getQ(float * q) {
   #else
     AHRSupdate(val[3] * M_PI/180, val[4] * M_PI/180, val[5] * M_PI/180, val[0], val[1], val[2]);
   #endif
-  
   q[0] = q0;
   q[1] = q1;
   q[2] = q2;
@@ -764,6 +792,7 @@ void arr3_rad_to_deg(float * arr) {
   arr[2] *= 180/M_PI;
 }
 
+#ifndef STM32F3DISCOVERY  
 
 /**
  * Fast inverse square root implementation
@@ -781,7 +810,9 @@ float invSqrt(float number) {
   y = * ( float * ) &i;
   y = y * ( f - ( x * y * y ) );
   return y;
+  
 }
 
+#endif  
 
 

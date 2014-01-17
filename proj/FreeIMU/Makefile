@@ -1,5 +1,5 @@
 # put your *.o targets here, make should handle the rest!
-SRCS = main.c FreeIMU.cpp
+SRCS = main.c FreeIMU.cpp FreeIMUTest.cpp
 
 # lib root
 LIB=../../lib
@@ -60,19 +60,22 @@ GDB_CMDS_FILE=$(EXTRA)/start.gdb
 CPUx=`echo $(CPU) | tr '[:lower:]' '[:upper:]'`
 
 CC=arm-none-eabi-gcc
+CPP=arm-none-eabi-g++
 GDB=arm-none-eabi-gdb
 OBJCOPY=arm-none-eabi-objcopy
 OBJDUMP=arm-none-eabi-objdump
 SIZE=arm-none-eabi-size
 
-CFLAGS  = -Wall -g -std=c99 -Os
+CFLAGS  = -Wall -g -Os
 CFLAGS += -mlittle-endian -mcpu=cortex-m4 -mthumb
 
 # floating point options
 CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=hard -fsingle-precision-constant
 
 CFLAGS += -ffunction-sections -fdata-sections
-CFLAGS += -Wl,--gc-sections -Wl,-Map=$(PROJ_NAME).map
+
+LDFLAGS = $(CFLAGS)
+LDLAGS += -Wl,--gc-sections -Wl,-Map=$(PROJ_NAME).map
 
 ###################################################
 
@@ -89,7 +92,13 @@ CFLAGS += -I $(STD_PERIPH_LIB)/inc
 CFLAGS += -I $(LIB)/CMSIS/Include
 CFLAGS += -I $(LIB)/CMSIS/Device/ST/$(CPUx)0x/Include
 
-OBJS = $(SRCS:.c=.o)
+CPPFLAGS += $(CFLAGS)
+
+#CC_SOURCES :=  $(filter %.cc, $(SRCS))
+#CPP_SOURCES := $(filter %.cpp, $(SRCS))
+
+OBJS:=$(addsuffix .o,$(basename $(SRCS)))
+OBJS+=$(addsuffix .o,$(basename $(SSRCS)))
 
 ###################################################
 
@@ -103,8 +112,23 @@ lib:
 
 proj: 	$(PROJ_NAME).elf $(PROJ_NAME).bin $(PROJ_NAME).hex $(PROJ_NAME).lst
 
-$(PROJ_NAME).elf: $(SRCS) $(SSRCS)
-	$(CC) $(CFLAGS) $^ -o $@ -L$(STD_PERIPH_LIB) -l$(CPU) -L$(LDSCRIPT_INC) -T$(CPU).ld
+
+.s.o :
+	@echo $^
+	$(CC) $(CFLAGS) $^ -o $@  -std=c99 -c 
+
+.c.o :
+	@echo $^
+	$(CC) $(CFLAGS) $^ -o $@  -std=c99 -c 
+	
+.cpp.o :
+	@echo $^
+	$(CPP) $(CPPFLAGS) $^ -o $@ -c
+
+	
+$(PROJ_NAME).elf: $(OBJS)
+	@echo "Linking...."
+	$(CC) $(OBJS) $(LDFLAGS) -L$(STD_PERIPH_LIB) -l$(CPU) -L$(LDSCRIPT_INC) -T$(CPU).ld -o $@
 	#$(OBJCOPY) -O ihex $(PROJ_NAME).elf $(PROJ_NAME).hex
 	#$(OBJCOPY) -O binary $(PROJ_NAME).elf $(PROJ_NAME).bin
 	#$(OBJDUMP) -St $(PROJ_NAME).elf >$(PROJ_NAME).lst

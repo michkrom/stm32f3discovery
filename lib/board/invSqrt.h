@@ -2,7 +2,15 @@
 // Inverse Square-Root
 // can use native computation or a "fast" method that is not faster when CPU uses fp coprocessor
 
-#ifndef FAST_INV_SQRT
+#ifndef _INV_SQRT_H
+#define _INV_SQRT_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+#ifdef FAST_INV_SQRT
 
 //float invSqrt(float x) { return 1.0f/sqrtf(x); }
 #include <math.h>
@@ -25,3 +33,10 @@ float invSqrt(float x)
 }
 
 #endif
+
+#ifdef __cplusplus
+}
+#endif
+
+
+#endif 

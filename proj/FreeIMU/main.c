@@ -1,4 +1,5 @@
 /* Includes ------------------------------------------------------------------*/
+
 #include "main.h"
 
 #include "stm32f30x_rcc.h"
@@ -10,7 +11,7 @@
 #include "imu_devs.h"
 
 
-extern void RunFreeIMUTests();
+extern void RunFreeIMUTest();
 
 /**
 * @brief  bump leds by one
@@ -82,7 +83,7 @@ int main(void)
   InitAccAndMag();
   InitGyro();
   
-  //RunFreeIMUTests();
+  RunFreeIMUTest();
   
 }
 
@@ -95,6 +96,21 @@ void _sys_exit(int return_code)
 {
   while(1);
 }
+
+extern void _exit(int return_code)
+{
+  _sys_exit(return_code);
+}
+
+extern void _kill()
+{
+}
+
+extern int _getpid()
+{
+  return 0;
+}
+
 
 /**************************************************************************************/
 
