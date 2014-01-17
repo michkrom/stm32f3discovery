@@ -9,6 +9,7 @@
 extern "C" {
 #endif
 
+#define FAST_INV_SQRT
 
 #ifdef FAST_INV_SQRT
 
