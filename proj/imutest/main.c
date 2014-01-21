@@ -69,7 +69,7 @@ void bumpLeds(int speed)
 }
 
 /**
-* @brief sample all sensors (blocking - will wait for all sensors to get new data
+* @brief sample all sensors (blocking - will wait for all sensors to get new data)
 * @param a - out accelerometer data
 * @param m - out magnetometer data
 * @param g - out gyro data

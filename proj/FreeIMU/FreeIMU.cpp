@@ -391,7 +391,8 @@ void FreeIMU::getValues(float * values) {
       ReadGyro(&values[3]);
       status |= 0x4;
     }
-  }    
+  }
+  // TODO: correct to FreeIMU order
 #endif // STM32F3DISCOVERY 
 
 }

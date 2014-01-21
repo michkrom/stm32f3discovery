@@ -155,9 +155,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #else
 
-#ifndef IS_9DOM
+#undef IS_9DOM
 #define IS_9DOM() 1
-#endif
+
+#undef HAS_AXIS_ALIGNED
+#define HAS_AXIS_ALIGNED() 1
 
 #endif // STM32F3DISCOVERY
 
