@@ -1,0 +1,64 @@
+[file_prefs]
+final_new_line=true
+ensure_convert_new_lines=true
+strip_trailing_spaces=true
+replace_tabs=true
+
+[indentation]
+indent_width=4
+indent_type=1
+indent_hard_tab_width=8
+detect_indent=false
+detect_indent_width=false
+indent_mode=2
+
+[project]
+name=imutest
+base_path=/home/m/git/stm32f3discovery/proj/imutest
+description=
+file_patterns=*.c;*.h;*.cpp;*.hpp;
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=4
+FILE_NAME_0=128;C;0;16;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Fimutest%2Fmain.c;0;4
+FILE_NAME_1=155;Make;0;16;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Fimutest%2FMakefile;0;4
+FILE_NAME_2=0;C;0;16;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Fimutest%2Fdemos.h;0;4
+FILE_NAME_3=0;C;0;16;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Fimutest%2Fdemos.c;0;4
+FILE_NAME_4=0;C;0;16;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Fimutest%2Fmain.h;0;4
+
+[VTE]
+last_dir=/home/m/git/stm32f3discovery/proj/imutest
+
+[build-menu]
+NF_00_LB=_Make
+NF_00_CM=make
+NF_00_WD=
+NF_01_LB=Program Flash
+NF_01_CM=make program
+NF_01_WD=
+NF_02_LB=Start Debugger
+NF_02_CM=make debug&
+NF_02_WD=
+CFT_00_LB=_Compile
+CFT_00_CM=make %e.o
+CFT_00_WD=
+CFT_01_LB=_Build
+CFT_01_CM=make
+CFT_01_WD=
+filetypes=C;
+EX_00_LB=_Execute
+EX_00_CM=make program
+EX_00_WD=
+NF_03_LB=Clean
+NF_03_CM=make clean
+NF_03_WD=
+
+[gproject]
+source_patterns=*.c;*.C;*.cpp;*.cxx;*.c++;*.cc;
+header_patterns=*.h;*.H;*.hpp;*.hxx;*.h++;*.hh;*.m;
+ignored_dirs_patterns=.*;CVS;
+generate_tags=true

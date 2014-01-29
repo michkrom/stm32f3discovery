@@ -28,7 +28,11 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
+
 #include "stm32f30x_it.h"
+#include <stm32f30x_rcc.h>
+#include <stm32f30x.h>
+
 
 /** @addtogroup STM32F3-Discovery_Demo
   * @{
@@ -134,9 +138,6 @@ void PendSV_Handler(void)
 {
 }
 
-long unsigned int SysTickCount = 0;
-static __IO uint32_t TimingDelay = 0;
-
 /**
   * @brief  This function handles SysTick Handler.
   * @param  None
@@ -144,27 +145,16 @@ static __IO uint32_t TimingDelay = 0;
   */
 void SysTick_Handler(void)
 {	
-	SysTickCount++;
-	if (TimingDelay != 0x00)
+	// in board.c
+	volatile extern uint64_t SysTickCount;
+	SysTickCount++;	
+	// in board.c	
+	volatile extern uint32_t TimingDelayCounter;
+	if (TimingDelayCounter != 0x00)
 	{ 
-		TimingDelay--;
+		TimingDelayCounter--;
 	}
 }
-
-/**
-	* @brief	Inserts a delay time.
-	* @param	nTicks to delay by
-	* @retval None
-	*/
-void Delay(__IO uint32_t nTicks)
-{
-	//long unsigned endTB = SysTickCount+nTime_ms;
-	//while( SysTickCount < endTB );
-	
-	TimingDelay = nTicks;
-	while(TimingDelay != 0);
-}
-
 
 /******************************************************************************/
 /*                 STM32F30x Peripherals Interrupt Handlers                   */
