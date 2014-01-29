@@ -41,15 +41,13 @@ SRCS += \
 SSRCS += \
  $(BRD)/startup_stm32f30x.s
 
- # imu library
-SRCS += \
-
 # Location of the linker scripts
 LDSCRIPT_INC=$(BRD)/ldscripts
 
 # location of OpenOCD Board .cfg files (only used with 'make program')
 OPENOCD_BOARD_DIR=board
 
+# this is the CPU of choice
 CPU=stm32f3
 
 # misc config files

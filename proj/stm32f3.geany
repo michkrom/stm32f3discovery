@@ -1,12 +1,12 @@
 [file_prefs]
 final_new_line=true
-ensure_convert_new_lines=false
-strip_trailing_spaces=false
-replace_tabs=false
+ensure_convert_new_lines=true
+strip_trailing_spaces=true
+replace_tabs=true
 
 [indentation]
 indent_width=4
-indent_type=1
+indent_type=0
 indent_hard_tab_width=8
 detect_indent=false
 detect_indent_width=false
@@ -24,13 +24,12 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=1803;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2Fmain.c;0;4
-FILE_NAME_1=104;None;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2FREADME.txt;0;4
-FILE_NAME_2=101;Make;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2FMakefile;0;4
-FILE_NAME_3=133;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fboard.h;0;4
-FILE_NAME_4=4120;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fstm32f30x_it.c;0;4
-FILE_NAME_5=8653;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2FSTM32F30x_StdPeriph_Driver%2Fsrc%2Fstm32f30x_misc.c;0;4
-FILE_NAME_6=97996;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2FCMSIS%2FInclude%2Fcore_cm4.h;0;4
+FILE_NAME_0=1912;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2Fmain.c;0;4
+FILE_NAME_1=106;Make;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2FMakefile;0;4
+FILE_NAME_2=345;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fkey.c;0;4
+FILE_NAME_3=167;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fleds.c;0;4
+FILE_NAME_4=6692;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fstm32f3_discovery.c;0;4
+FILE_NAME_5=4013;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fstm32f3_discovery.h;0;4
 
 [VTE]
 last_dir=/home/m/git/stm32f3discovery/proj/imutest
