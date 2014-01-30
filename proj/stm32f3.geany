@@ -24,12 +24,13 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=1912;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2Fmain.c;0;4
+FILE_NAME_0=6376;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2Fmain.c;0;4
 FILE_NAME_1=106;Make;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2FMakefile;0;4
-FILE_NAME_2=345;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fkey.c;0;4
-FILE_NAME_3=167;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fleds.c;0;4
-FILE_NAME_4=6692;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fstm32f3_discovery.c;0;4
-FILE_NAME_5=4013;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fstm32f3_discovery.h;0;4
+FILE_NAME_2=182;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fkey.c;0;4
+FILE_NAME_3=413;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fleds.c;0;4
+FILE_NAME_4=1203;C;0;EUTF-8;0;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fboard.c;0;4
+FILE_NAME_5=528;C;0;EUTF-8;0;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fboard.h;0;4
+FILE_NAME_6=2950;C;0;EUTF-8;0;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fstm32f3_discovery.h;0;4
 
 [VTE]
 last_dir=/home/m/git/stm32f3discovery/proj/imutest
@@ -42,7 +43,7 @@ NF_02_LB=Make _Object
 NF_02_CM=make %e.o
 NF_02_WD=
 EX_00_LB=Debug
-EX_00_CM=make debug
+EX_00_CM=make program;make debug
 EX_00_WD=
 CFT_00_LB=_Compile
 CFT_00_CM=make %e.o
@@ -60,9 +61,17 @@ MakeFT_01_WD=
 EX_01_LB=Serial Console
 EX_01_CM=picocom /dev/ttyUSB0 -b 115200
 EX_01_WD=
-NF_03_LB=Run
-NF_03_CM=make run
+NF_03_LB=Program
+NF_03_CM=make program
 NF_03_WD=
-CFT_02_LB=Program
-CFT_02_CM=make program
+CFT_02_LB=Run
+CFT_02_CM=make run
 CFT_02_WD=
+
+[debugger]
+target=
+debugger=
+arguments=
+envvar_count=0
+watches_count=0
+breaks_count=0
