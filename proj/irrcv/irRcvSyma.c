@@ -1,5 +1,5 @@
 /**
- * IR decoder for PROTOCOL TracerJet RC codes.
+ * IR decoder for SYMA S107C HElIcopter remote codes.
  *
  * @author Michal Krombholz
  * @license GNU General Public License (GPL) v2 or later
@@ -7,21 +7,16 @@
 
 
 //------------------------------ IR decoder ----------------------------------
-// "Protocol TracerJet Heli" RC remote protocol description.
+// "SYMA S107C Heli" RC remote protocol description.
 // (may fit other helis from "Protocol" but is different then SIMA Helis.
 //
-// The remote pulses IR (@38kHz carrier) for a variable time of 400us
-// the time between IR bursts is used to mean one of 3 SYMBOLs:
-// START, LONG and SHORT.
-// The command consist of sequence of 500us burst then START then 32 bits of data.
-// the gap between IR bursts is 400us
-// the gap between commands is about ~170ms
-//
-// start symbol + 32bit, IR burst off time is 400us
-// symbol times from edge of IR to next edge of IR
-// start    = 2000us
-// long(1)  = 1200us
-// short(0) =  800us
+// The remote pulses IR @38kHz carrier
+// The command consist of:
+// - preamble (start) 2ms on 2 ms off
+// - 32 command bits
+//   * zero: ~320us on + 280us off = ~ 600us cycle
+//   * one:  340us on + 660us off  = ~ 1000us cycle
+// - final IR PULSE
 //
 // Detection Algorithm
 //
@@ -63,9 +58,9 @@ static volatile uint32_t irReceivedCommand;
 */
 void irRcvInitProtocol(uint32_t ticksPerUs)
 {
-    IR_SYMBOL_START = (2000 * ticksPerUs);
-    IR_SYMBOL_LONG  = (1200 * ticksPerUs);
-    IR_SYMBOL_SHORT = (800 * ticksPerUs);
+    IR_SYMBOL_START = (4000 * ticksPerUs);
+    IR_SYMBOL_LONG  = (1000 * ticksPerUs);
+    IR_SYMBOL_SHORT = (600 * ticksPerUs);
     IR_SYMBOL_TOLERANCE = (200 * ticksPerUs);
     irReceivedCommand = 0;
 }

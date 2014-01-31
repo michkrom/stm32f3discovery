@@ -15,7 +15,7 @@ void irRcvInit();
 
 /**
 * @brief return next command received or 0 if none; (destructive read)
-* @retval IR 33bit command (zero==none received since last time it was called)
+* @retval IR 32bit command (zero==none received since last time it was called)
 */
 uint32_t irRcvGetCommand();
 

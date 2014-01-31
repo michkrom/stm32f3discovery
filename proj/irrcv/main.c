@@ -1,3 +1,9 @@
+/**
+ * IR decoder for SYMA S107C or PROTOCOL TraceJet HElIcopter remote codes.
+ *
+ * @author Michal Krombholz
+ * @license GNU General Public License (GPL) v2 or later
+ */
 /* Includes ------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -54,9 +60,10 @@ int main(void)
         if( cmd != 0 ) {
             unsigned th = cmd >> 16;
             unsigned tl = cmd & 0xFFFF;
-            printf("%x %x",th,tl);
+            printf("%04x %04x",th,tl);
 //          printf(" %b %b ",th,tl);
 
+#ifdef TRACERJET
             // power: 0-100 (127?); 128 - off; > 128 dynamic boost (seen 130ish to 228max only)
             unsigned pwr = IR_CMD_PWR(cmd);
             unsigned lr = IR_CMD_LR(cmd); // roll: left=15...right=1; neutral=8 (-7..+7)
@@ -79,6 +86,26 @@ int main(void)
             printf(" ch=%i",ch);
             printf(" trm=%i",trm);
             printf(" sum=%X %X %s",sum,sum2,IR_CMD_VALID(cmd)?"OK":"err");
+#else // syma
+            int ch =  (cmd >> (8+7)) & 0x1;
+            int pwr = (cmd >> 8) & 0x7F; // 0..127
+            int trm = (cmd >> 0) & 0x7F; // 0..127 (1..125 in practice)
+            int unk1 = (cmd >> 7) & 0x1; // top bit in trm (unused)
+            int lr =  (cmd >> 24) & 0xFF;
+            int unk2 = (cmd >> 31) & 0x1; // top bit in lr (unused)
+            int fb =  (cmd >> 16) & 0xFF; // 0..127 (f..b)
+            int unk3 = (cmd >> 23) & 0x1; // top bit in fb (unused)
+            // note trim offsets the lr when pwr>0
+            // trim=63 (middle) ==> lr=63 (middle)
+            // "untrimmed" lr value formula (keeps lr nutral between 61-65 - not perfect)
+            int lr0 = lr - ((trm-63)/3);
+
+            printf(" ch=%i",ch);
+            printf(" pwr=%i",pwr);
+            printf(" fb=%i lr=%i,%i",fb,lr,lr0);
+            printf(" trm=%i",trm);
+#endif
+
             printf("\r\n");
         }
     }
