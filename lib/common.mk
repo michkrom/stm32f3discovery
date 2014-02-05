@@ -155,6 +155,8 @@ clean:
 	rm -f $(OBJS)
 	find ./ -name '*~' | xargs rm -f
 	rm -f *.o
+	rm -f .depend
+	rm -f *.d
 	rm -f $(PROJ_NAME).elf
 	rm -f $(PROJ_NAME).hex
 	rm -f $(PROJ_NAME).bin
@@ -163,3 +165,16 @@ clean:
 
 reallyclean: clean
 	$(MAKE) -C $(STD_PERIPH_LIB) clean
+
+%.d: %.c
+	$(CC) $(CFLAGS) -MMD -MP -o $@ -c $<
+%.d: %.cpp
+	$(CC) $(CPPFLAGS) $(CFLAGS) -MMD -MP -o $@ -c $<
+
+depend: .depend
+
+.depend: $(SRCS)
+	rm -f ./.depend
+	$(CC) $(CFLAGS) -MM $^>>./.depend;
+
+include .depend

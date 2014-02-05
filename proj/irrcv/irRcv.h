@@ -10,6 +10,10 @@
  * Works may contain parts by others and are licencsed by their corresponding, original licenses.
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define IR_TRACERJET
 //#define IR_SYMA
 //#define IR_USERIES
@@ -27,6 +31,12 @@ void irRcvInit();
 */
 uint32_t irRcvGetCommand();
 
+
+/**
+* @brief global count of IR timing errors
+*/
+extern volatile uint32_t irRcvErrorCount;
+
 #ifdef IR_TRACERJET
 
 // PROTOCOL TRACERJET's IR command fields
@@ -41,8 +51,10 @@ uint32_t irRcvGetCommand();
 #define IR_CMD_CH(cmd)  (((cmd) >> 14) & 0x3)
 // 0..63; 6 bits
 #define IR_CMD_TRM(cmd) (((cmd) >> 8 ) & 0x3F)
-// assume these are "buttons" ie a 0.5ch extra (not present on my RC)
-#define IR_CMD_BTN(cmd) (((cmd) >> 6) & 0x3)
+// assume these are "buttons" ie a 0.5ch extra (not physicly present on my RC)
+#define IR_CMD_BTNL(cmd) (((cmd) >> 6) & 0x1)
+#define IR_CMD_BTNR(cmd) (((cmd) >> 7) & 0x1)
+#define IR_CMD_BTNM(cmd) (0)
 // checksum
 #define IR_CMD_SUM(cmd) ((cmd) & 0x3F)
 
@@ -83,9 +95,9 @@ uint32_t irRcvGetCommand();
 // 0..127; 7 bits (1..125 on my remote)
 #define IR_CMD_TRM(cmd) ((cmd >> 0) & 0x7F)
 
-// assume these are "buttons" ie a 0.5ch extra (not physicly present on my RC)
-#define IR_CMD_BTNL(cmd) (((cmd) >> 6) & 0x1)
-#define IR_CMD_BTNR(cmd) (((cmd) >> 7) & 0x1)
+// are there SYMA RCs with buttons?
+#define IR_CMD_BTNL(cmd) (0)
+#define IR_CMD_BTNR(cmd) (0)
 #define IR_CMD_BTNM(cmd) (0)
 
 // no checksum in SYMA's cmd
@@ -103,14 +115,16 @@ uint32_t irRcvGetCommand();
 #ifdef IR_USERIES
 
 #define IR_CMD_PWR(cmd) ((cmd >> 24) & 0xFF) // 0..0xC8
+#define IR_CMD_FB(cmd)  ((cmd >> 20) &0xF) // u2 fwd > 0 ; bkd < 0
+#define IR_CMD_RL(cmd)  ((cmd >> 16) &0xF) // u2 lft > 0 ; rht < 0
 #define IR_CMD_TRM(cmd) ((cmd >> 8) & 0xFF) // 0..0xff
+
 // buttons are in lowest byte (left, right, mode)
 #define IR_CMD_BTNL(cmd)((cmd >> 4) & 0x1)
 #define IR_CMD_BTNR(cmd)((cmd >> 3) & 0x1)
 #define IR_CMD_BTNM(cmd)((cmd >> 2) & 0x1)
+
 #define IR_CMD_CH(cmd)  ((cmd >> 0) & 0x3) // A=2 B=1 C=0
-#define IR_CMD_FB(cmd) ((cmd >> 20) &0xF) // u2 fwd > 0 ; bkd < 0
-#define IR_CMD_RL(cmd) ((cmd >> 16) &0xF) // u2 lft > 0 ; rht < 0
 
 // TODO: there is a 3-bit checksum but I do not care
 #define IR_CMD_SUM(cmd) ((cmd >> 5) & 0x7) // some kind of 3-bit checksum
@@ -129,7 +143,11 @@ uint32_t irRcvGetCommand();
 
 
 // should be called from the interrupt when edge of IR is detected
-extern void irRcvReportIRDetected(uint32_t delta);
+void irRcvReportIRDetected(uint32_t delta);
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _IRRCV_H

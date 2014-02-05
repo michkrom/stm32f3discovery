@@ -23,6 +23,8 @@
 *.bin
 *.map
 *.lst
+*.d
+.depend
 
 # uVision * project
 *.uvgui.m
