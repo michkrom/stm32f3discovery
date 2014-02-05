@@ -24,13 +24,12 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=6376;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2Fmain.c;0;4
-FILE_NAME_1=106;Make;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2FMakefile;0;4
-FILE_NAME_2=182;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fkey.c;0;4
-FILE_NAME_3=413;C;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fleds.c;0;4
-FILE_NAME_4=1203;C;0;EUTF-8;0;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fboard.c;0;4
-FILE_NAME_5=528;C;0;EUTF-8;0;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fboard.h;0;4
-FILE_NAME_6=2950;C;0;EUTF-8;0;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fboard%2Fstm32f3_discovery.h;0;4
+FILE_NAME_0=455;Make;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2FMakefile;0;4
+FILE_NAME_1=618;C;0;EUTF-8;0;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2FirRcv.c;0;4
+FILE_NAME_2=1593;Make;0;EUTF-8;1;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Flib%2Fcommon.mk;0;4
+FILE_NAME_3=179;C;0;EUTF-8;0;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2Fmain.c;0;4
+FILE_NAME_4=501;C;0;EUTF-8;0;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2FirRcvInput.c;0;4
+FILE_NAME_5=714;C;0;EUTF-8;0;1;0;%2Fhome%2Fm%2Fgit%2Fstm32f3discovery%2Fproj%2Firrcv%2FirRcv.h;0;4
 
 [VTE]
 last_dir=/home/m/git/stm32f3discovery/proj/imutest
@@ -69,8 +68,8 @@ CFT_02_CM=make run
 CFT_02_WD=
 
 [debugger]
-target=
-debugger=
+target=/home/m/git/stm32f3discovery/proj/irrcv/main.elf
+debugger=GDB
 arguments=
 envvar_count=0
 watches_count=0

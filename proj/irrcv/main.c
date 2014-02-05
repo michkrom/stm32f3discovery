@@ -1,5 +1,5 @@
 /**
- * IR decoder for SYMA S107C or PROTOCOL TraceJet HElIcopter remote codes.
+ * IR decoder for SYMA S107G, PROTOCOL TraceJet and U810 HELIcopters remote codes.
  *
  * @author Michal Krombholz
  * @license GNU General Public License (GPL) v2 or later
@@ -33,6 +33,14 @@ void bumpLeds(int speed)
 
 }
 
+void printbin(uint32_t val, int startbit, int bitcount)
+{
+    while( --bitcount >= 0 )
+    {
+        printf( (val >> (startbit ++) ) & 1  ? "1" : "0");
+    }
+}
+
 /* MAIN ------------------------------------------------------------------*/
 
 /**
@@ -60,9 +68,16 @@ int main(void)
         if( cmd != 0 ) {
             unsigned th = cmd >> 16;
             unsigned tl = cmd & 0xFFFF;
-            printf("%04x %04x",th,tl);
+            printf("%04x %04x ",th,tl);
 //          printf(" %b %b ",th,tl);
-
+            printbin(cmd, 24, 8);
+            printf(" ");
+            printbin(cmd, 16, 8);
+            printf(" ");
+            printbin(cmd,  8, 8);
+            printf(" ");
+            printbin(cmd,  0, 8);
+#if 0
 #ifdef TRACERJET
             // power: 0-100 (127?); 128 - off; > 128 dynamic boost (seen 130ish to 228max only)
             unsigned pwr = IR_CMD_PWR(cmd);
@@ -105,8 +120,17 @@ int main(void)
             printf(" fb=%i lr=%i,%i",fb,lr,lr0);
             printf(" trm=%i",trm);
 #endif
-
+#endif
             printf("\r\n");
+        }
+        else
+        {
+            extern uint32_t irRcvErrorCount;
+            if( irRcvErrorCount > 10 )
+            {
+                printf("Err=%u\r\n",(unsigned)irRcvErrorCount);
+                irRcvErrorCount = 0;
+            }
         }
     }
 }

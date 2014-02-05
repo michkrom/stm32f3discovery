@@ -3,7 +3,10 @@
  * contain pin interrupt and callout to the decoder
  *
  * @author Michal Krombholz
- * @license GNU General Public License (GPL) v2 or later
+ * @license Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0)
+ * http://creativecommons.org/licenses/by-sa/3.0/
+ *
+ * Works may contain parts by others and are licencsed by their corresponding, original licenses.
  */
 
 #include "board.h"
@@ -13,7 +16,7 @@
 #include "stm32f30x_exti.h"
 #include "stm32f30x_gpio.h"
 
-#include "leds.h"
+#include "irRcv.h"
 
 // defined in irRcv protocol dependent file
 extern void irRcvInitProtocol(uint32_t ticksPerUs);
@@ -56,8 +59,15 @@ void irRcvInit()
     /* Configure Button EXTI line */
     EXTI_InitStructure.EXTI_Line = IR_INPUT_EXTI_LINE;
     EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-    //EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+    //EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+
+// tracer jet uses rising edge (end of IR burst) as there is a leading IR burst but no trailing burst
+#ifdef IR_EDGE_RISING
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+#else
     EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+#endif
+
     EXTI_InitStructure.EXTI_LineCmd = ENABLE;
     EXTI_Init(&EXTI_InitStructure);
 
@@ -79,6 +89,7 @@ void irRcvInit()
 /**
  * @breaf Returns the state of IR input pin (for debugging)
  */
+inline
 uint32_t irRcvGetInputState()
 {
   return GPIO_ReadInputDataBit(IR_INPUT_GPIO_PORT, IR_INPUT_PIN);
@@ -90,14 +101,16 @@ uint32_t irRcvGetInputState()
  */
 void EXTI1_IRQHandler(void)
 {
-    SetLed( L1 | ON );
-
     if(EXTI_GetITStatus(EXTI_Line1) != RESET)
     {
-        uint32_t now = (uint32_t)GetHClockTicks();
-        irRcvReportEdgeDetected(now);
+        static uint32_t prev;
+        uint32_t now = GetHClockTicks();
+        uint32_t delta = now > prev ? now-prev : ((uint32_t)0xFFFFFFFF) - (prev-now);
+        prev = now;
+
+        irRcvReportIRDetected(delta);
+
+        // clear IRQ
         EXTI_ClearITPendingBit(EXTI_Line1);
     }
-
-    SetLed( L1 | OFF );
 }
