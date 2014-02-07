@@ -62,10 +62,15 @@ int main(void)
     printf("HCLK=%u\r\n",GetHClockFrequency());
 
     // loop forever and decode IR codes
+    int cnt = 0;
     while( 1 )
     {
+        if( (cnt++ & 0xFFFF) == 0 )
+            bumpLeds(1);
         unsigned cmd = irRcvGetCommand();
         if( cmd != 0 ) {
+            bumpLeds(10);
+
             unsigned th = cmd >> 16;
             unsigned tl = cmd & 0xFFFF;
             printf("%04x %04x ",th,tl);

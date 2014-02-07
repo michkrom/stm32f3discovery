@@ -1,4 +1,10 @@
-# command make for stm32f3discovery
+# command make include for stm32f3discovery
+#
+# @author Michal Krombholz
+# @license Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0)
+# http://creativecommons.org/licenses/by-sa/3.0/
+#
+# Works may contain parts by others and are licencsed by their corresponding, original licenses.
 
 #default project name
 # all the files will be generated with this name (main.elf, main.bin, main.hex, etc)
@@ -7,6 +13,7 @@ PROJ_NAME=main
 # libs root
 LIB+=../../lib
 
+# TODO make it a real lib one day
 # IMU sources (to be added in project makefile)
 # SRCS += $(IMUSRCS)
 # INCL += -I $(IMU)
