@@ -2,7 +2,7 @@
  * IR decoder for SYMA S107G, PROTOCOL TraceJet and U810 HELIcopters remote codes.
  *
  * @author Michal Krombholz
- * @license GNU General Public License (GPL) v2 or later
+ * @license Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0)
  */
 /* Includes ------------------------------------------------------------------*/
 
@@ -65,9 +65,7 @@ int main(void)
     int cnt = 0;
     while( 1 )
     {
-        if( (cnt++ & 0xFFFF) == 0 )
-            bumpLeds(1);
-        unsigned cmd = irRcvGetCommand();
+        uint32_t cmd = irRcvGetCommand();
         if( cmd != 0 ) {
             bumpLeds(10);
 
@@ -104,8 +102,10 @@ int main(void)
 #endif
             printf("\r\n");
         }
-        else
+        else // cmd not ready
         {
+            if( (cnt++ & 0xFFFF) == 0 )
+                bumpLeds(1);
             if( irRcvErrorCount > 10 )
             {
                 printf("Err=%u\r\n",(unsigned)irRcvErrorCount);
